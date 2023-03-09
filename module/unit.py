@@ -38,7 +38,7 @@ class BaseUnit(ABC):
             damage -= target.armor.defence * target.unit_class.armor
 
         damage = round(damage, 1)
-        self.get_damage(damage)
+        target.get_damage(damage)
         return damage
 
     def get_damage(self, damage: float) -> None:
@@ -68,13 +68,13 @@ class PlayerUnit(BaseUnit):
         if damage > 0:
             return f'{self.name} используя {self.weapon.name} пробивает {target.armor.name} соперника и наносит {damage} урона.'
         else:
-            f'{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его останавливает.'
+            return f'{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его останавливает.'
 
 
 class EnemyUnit(BaseUnit):
 
     def hit(self, target: BaseUnit) -> str:
-        if self._is_skill_used and self.stamina >= self.unit_class.skill.stamina and randint(0, 100) < 90:
+        if not self._is_skill_used and self.stamina >= self.unit_class.skill.stamina and randint(0, 100) < 20:
             return self.use_skill(target)
 
         if self.stamina < self.weapon.stamina_per_hit:
@@ -84,4 +84,4 @@ class EnemyUnit(BaseUnit):
         if damage > 0:
             return f'{self.name} используя {self.weapon.name} пробивает {target.armor.name} соперника и наносит {damage} урона.'
         else:
-            f'{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его останавливает.'
+            return f'{self.name} используя {self.weapon.name} наносит удар, но {target.armor.name} cоперника его останавливает.'

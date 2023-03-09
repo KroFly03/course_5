@@ -53,7 +53,12 @@ class Arena(metaclass=BaseSingleton):
             return result
         if self.game_is_running:
             self._stamina_regeneration()
-            return self.enemy.hit(self.player)
+            result = self.enemy.hit(self.player)
+            if self.player.hp < 0:
+                result = self._check_players_hp()
+                if result is not None:
+                    return result
+            return result
 
     def _end_game(self):
         self._instances = {}
